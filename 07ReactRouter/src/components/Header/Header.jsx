@@ -47,7 +47,7 @@ export default function Header() {
 
               <li>
                 <NavLink
-                  to="/About"
+                  to="/about"
                   className={({ isActive }) =>
                     `block py-2 pr-4 pl-3 duration-200 ${
                       isActive ? "text-orange-700" : "text-gray-700"
@@ -60,7 +60,7 @@ export default function Header() {
 
               <li>
                 <NavLink
-                  to="/Services"
+                  to="/services"
                   className={({ isActive }) =>
                     `block py-2 pr-4 pl-3 duration-200 ${
                       isActive ? "text-orange-700" : "text-gray-700"
@@ -73,7 +73,7 @@ export default function Header() {
 
               <li>
                 <NavLink
-                  to="/GitHub"
+                  to="/Github"
                   className={({ isActive }) =>
                     `block py-2 pr-4 pl-3 duration-200 ${
                       isActive ? "text-orange-700" : "text-gray-700"
@@ -86,7 +86,7 @@ export default function Header() {
 
               <li>
                 <NavLink
-                  to="/Contact-Us"
+                  to="/contact-Us"
                   className={({ isActive }) =>
                     `block py-2 pr-4 pl-3 duration-200 ${
                       isActive ? "text-orange-700" : "text-gray-700"

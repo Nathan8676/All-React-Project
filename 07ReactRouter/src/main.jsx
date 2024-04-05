@@ -2,29 +2,53 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Home, Contact, About } from "./components/Index.js";
+import {
+  Route,
+  RouterProvider,
+  createBrowserRouter,
+  createRoutesFromElements,
+} from "react-router-dom";
+import {
+  Home,
+  Contact,
+  About,
+  User,
+  Github,
+  githubInfoLoader,
+} from "./components/Index.js";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    children: [
-      {
-        path: "",
-        element: <Home />,
-      },
-      {
-        path: "About",
-        element: <About />,
-      },
-      {
-        path: "Contact-Us",
-        element: <Contact />,
-      },
-    ],
-  },
-]);
+// const router = createBrowserRouter([
+//   {
+//     path: "/",
+//     element: <App />,
+//     children: [
+//       {
+//         path: "",
+//         element: <Home />,
+//       },
+//       {
+//         path: "About",
+//         element: <About />,
+//       },
+//       {
+//         path: "Contact-Us",
+//         element: <Contact />,
+//       },
+//     ],
+//   },
+// ]);
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<App />}>
+      <Route path="" element={<Home />} />
+      <Route path="about" element={<About />} />
+      <Route path="contact-Us" element={<Contact />} />
+      <Route path="user/:userid" element={<User />} />
+      <Route loader={githubInfoLoader} path="GitHub" element={<Github />} />
+    </Route>
+  )
+);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
