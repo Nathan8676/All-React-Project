@@ -15,6 +15,8 @@ import {
   User,
   Github,
   githubInfoLoader,
+  Services,
+  LoginSignup,
 } from "./components/Index.js";
 
 // const router = createBrowserRouter([
@@ -44,6 +46,8 @@ const router = createBrowserRouter(
       <Route path="" element={<Home />} />
       <Route path="about" element={<About />} />
       <Route path="contact-Us" element={<Contact />} />
+      <Route path="services" element={<Services />} />
+      <Route path="login" element={<LoginSignup />} />
       <Route path="user/:userid" element={<User />} />
       <Route loader={githubInfoLoader} path="GitHub" element={<Github />} />
     </Route>
