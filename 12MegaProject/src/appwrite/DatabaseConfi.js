@@ -72,7 +72,7 @@ export class DatabaseConfi {
             return await this.storage.createFile(config.BucketId, ID.unique(), file)
         } catch (error) {
             console.log("this error is from DatabaseConfi::uploadFile", error);
-            return false
+            return {error: error.message}
         }
     }
 

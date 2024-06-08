@@ -52,7 +52,7 @@ function Signup() {
         <form onSubmit={handleSubmit(signup)} >
             <div className='space-y-5'>
                 <Input
-                lable = 'FullName:'
+                label = 'FullName:'
                 type='text'
                 placeholder="Enter your full name"
                 {...register('FullName', {
@@ -64,7 +64,7 @@ function Signup() {
                 })}
                 />
                 <Input
-                lable = 'Email:'
+                label = 'Email:'
                 type='email'
                 placeholder="Enter your email"
                 {...register('email', {
@@ -75,7 +75,7 @@ function Signup() {
                 })}
                 />
                 <Input
-                lable = 'Password:'
+                label = 'Password:'
                 type = 'password'
                 placeholder="Enter your password"
                 {...register('password', {

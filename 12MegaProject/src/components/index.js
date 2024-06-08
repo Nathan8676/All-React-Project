@@ -6,4 +6,6 @@ import Logout from "./Header/LogoutBtn";
 import Button from "./Button";
 import Input from "./Input"
 import Select from "./Select";
-export {Button, Header, Footer, container, Logo, Logout, Input, Select }
+import RTE from "./RTE";
+import Protected from "./Protected";
+export {Button, Header, Footer, container, Logo, Logout, Input, Select, RTE, Protected }
