@@ -1,48 +1,74 @@
+import databaseConfi  from '../../appwrite/DatabaseConfi'
 import React, {useCallback, useEffect, useState} from 'react'
 import {useForm} from 'react-hook-form'
-import databaseConfi  from '../../appwrite/DatabaseConfi'
 import {useNavigate} from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import {Button , Input , Logo , RTE, Select} from '../index'
+import {Button , Input , RTE, Select} from '../index'
 function PostForms({Post}) {
 
   const {register, setValue, getValues, watch, control , handleSubmit} = useForm({
     defaultValues: {
       title: Post?.title || "",
-      content: Post?.content || "",
-      status: Post?.status || "inactive",
+      slug: Post?.$id || "",
+      Content: Post?.content || "",
+      status: Post?.STATUS || "inactive",
+      coverImage: Post?.FEATUREDIMG || null
     }
   })
   const [error , setError] = useState("")
   const navigate = useNavigate()
-  const userData = useSelector(state => state.auth.userData)
+  const userData = useSelector((state) => state.auth.userData)
 
-  const Post = async(data) => {
+  const post = async(data) => {
+    
     setError("")
     if(Post){
-      const file = await data.image[0]? databaseConfi.uploadFile(data.image[0]) : null
+      const file =  data.image[0]? await databaseConfi.uploadFile(data.image[0]) : null
       if(file) {
-        await databaseConfi.deleteFile(Post.FEATUREDIMG)
+        await databaseConfi.deleteFile(Post.FEATUREDIMG).then(() => {
+          databaseConfi.updatePost(Post.$id, {title: data.title, status: data.status, content: data.Content, coverImage: file?.$id }).then((updatedPost) => {
+            if(updatedPost && updatedPost.error){
+              setError(updatedPost.error)
+              databaseConfi.deleteFile(file.$id).then(() => console.log("Image deleted"))
+              return         
+            }
+          })
+        })
+      }else{
+        databaseConfi.updatePost(Post.$id, {title: data.title, status: data.status, content: data.Content}).then((updatedPost) => {
+          if(updatedPost&& updatedPost.error){
+            setError(updatedPost.error)
+            return
+          }
+          if(updatedPost){
+            navigate(`/post/${updatedPost.$id}`)
+          }
+        })
       }
-     const updatedPost = await databaseConfi.updatePost(Post.$id, {...data , coverImage: file? file.$id : Post.FEATUREDIMG })
-
-     if(updatedPost){
-      navigate(`/post/${updatedPost.$id}`)
-     }
 
     }else{
-      const file = await data.image[0]? databaseConfi.uploadFile(data.image[0]) : null
+      const file = data.image[0]? await databaseConfi.uploadFile(data.image[0]) : null
       if(file && file.error){
         setError(file.error)
         return
       }
-      const newPost = await databaseConfi.createPost({...data,userID: userData.$id ,coverImage: file? file.$id : null})
-
-      if(newPost){
-        navigate(`/post/${newPost.$id}`)
-
-    }
+      if(file) {
+        const fileId = file.$id
+        data.coverImage = fileId
+        const newPost = await databaseConfi.createPost({title: data.title, slug: data.slug,status: data.status, coverImage: data.coverImage, content: data.Content,userID: userData.$id ,})
+        if(newPost && newPost.error){
+          setError(newPost.error)
+          await databaseConfi.deleteFile(fileId).then(() => console.log("Image deleted"))
+          return
+        }
+        if(newPost){
+          navigate(`/post/${newPost.$id}`)
+        }
+      }
   }
+  }
+
+
 
   const slugTransform = useCallback((title) => {
     if(title && typeof title == "string")
@@ -54,19 +80,19 @@ function PostForms({Post}) {
     
     return ''
 
-  })
+  },[])
 
   useEffect(() => {
     const subscription = watch((value, {name}) => {
       if(name == "title"){
         setValue("slug", slugTransform(value.title), {shouldValidate: true})
       }
-      return () => subscription.unsubscribe()
     })
+    return () => subscription.unsubscribe()
   }, [slugTransform, watch, setValue])
 
   return (
-    <form onSubmit={handleSubmit(Post)} className='flex flex-wrap'>
+    <form  onSubmit={handleSubmit(post)} className='flex flex-wrap'>
       <div className="w-2/3 px-2">
           <Input
             type="text"
@@ -77,16 +103,16 @@ function PostForms({Post}) {
           />
           <Input
             type="text"
-            readonly
+            readOnly
             name="slug"
             placeholder="Enter slug"
             label="Slug"
             {...register("slug" , {required: true})}
-            oninput={(e) => {
+            onInput={(e) => {
               setValue("slug", slugTransform(e.currentTarget.value), {shouldValidate: true})
             }}
           />
-          <RTE name="content" label="Content" {...register("content" , {required: true})} />
+          <RTE control={control} Name="Content" label="Content :" defaultValue={Post? Post.content : getValues("Content")} />
       </div>
       <div className="w-1/3 px-2">
         {error && <p className="text-red-500 text-2xl text-center">could't create post because {error}</p>}
@@ -116,7 +142,6 @@ function PostForms({Post}) {
       </div>
     </form>
   )
- }
 }
 
 export default PostForms

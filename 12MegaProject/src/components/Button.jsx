@@ -10,6 +10,7 @@ function Button({
 }) {
   return (
     <button
+    type={type}
     className={`py-2 px-2 m-2 ${className}
     ${textColor} ${bgColor} rounded-lg  `}
     {...props}

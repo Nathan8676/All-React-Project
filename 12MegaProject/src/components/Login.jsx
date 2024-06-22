@@ -9,12 +9,12 @@ function Login() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [error , setError] = useState("")
-    const [register, handleSubmit] = useForm()
+    const {register, handleSubmit} = useForm()
 
     const login = async (data) => {
         try {
             setError("")
-            const session = await AuthService.login(data)
+            const session = await AuthService.login({email: data.email, password: data.password})
             if(session){
                const userData = await AuthService.getCurrentUser()
                if(userData){
@@ -50,45 +50,43 @@ function Login() {
             <p className="mt-2 text-center text-base text-black/60">
                 Forgot Password?&nbsp;
                 <Link
-                    to="/reset-password"
+                    to='/create-password-recovery'
                     className="font-medium text-primary transition-all duration-200 hover:underline"
                 >
                     Forgot Password
                 </Link>
             </p>
-        </div>
+       
         {error && <p className="text-red-600 mt-8 text-center" >{error}</p>}
-        <form onSubmit={handleSubmit(login)} >
-            <div className='space-y-5'>
+            <form onSubmit={handleSubmit(login)} >
+                <div className='space-y-5'>
                 <Input
-                label= 'Email: '
-                placeholder="Enter your email"
-                type="email"
-                {...register("email", {
-                    required: true,
-                    validate: {
-                        matchPattern: (value) =>  /^[^\s@]+@[^\s@]+\.[^\s@]+$/ .test(value) || "Email address must be a valid address",
-                    }
-                })}
-                />
-                <Input
-                label = 'Password: '
-                placeholder= "Enter your password"
-                type="password"
-                {...register("password", {
-                    required: true,
-                    validate: {
-                        matchPattern: (value) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(value) || "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character",
-                    }
-                })}
-                />
-                <Button
-                children="Login"
-                type='submit'
-                className='w-full'
-                />
-            </div>
-        </form>
+                    label= 'email: '
+                    placeholder="Enter your email"
+                    type="email"
+                    {...register("email", {
+                        required: true,
+                        validate: {
+                            matchPattern: (value) =>  /^[^\s@]+@[^\s@]+\.[^\s@]+$/ .test(value) || "Email address must be a valid address",
+                        }
+                    })}
+                    />
+                    <Input
+                    label = 'Password: '
+                    placeholder= "Enter your password"
+                    type="password"
+                    {...register("password", {
+                        required: true,
+                    })}
+                    />
+                    <Button
+                    children="Login"
+                    type='submit'
+                    className='w-full'
+                    />
+                </div>
+            </form>
+        </div>
     </div>
   )
 }

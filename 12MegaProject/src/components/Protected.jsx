@@ -10,6 +10,7 @@ function Protected({children, authentication = true}) {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
+
         if(authentication && authStatus !== authentication){
             navigate('/login')
         }else if(!authentication && authStatus !== authentication){
@@ -18,7 +19,7 @@ function Protected({children, authentication = true}) {
         setLoading(false)
     },[authStatus, navigate, authentication])
 
-  return loading ? <h1>Loading...</h1> : {children}
+  return loading ? <h1>Loading...</h1> : children
 }
 
 export default Protected

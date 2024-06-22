@@ -1,0 +1,11 @@
+import AddPost from './AddPost'
+import Home from './Home'
+import Post, {PostLoader} from './Post'
+import EditedPost, {EditedPostLoader} from './EditedPost'
+import Login from './Login'
+import Signup from './Signup'
+import AllPost, {AllPostLoader} from './AllPost'
+import PasswordReset  from './PasswordReset'
+import CreatePasswordRecovery from './CreatePasswordRecovery'
+import MyPost from './MyPost'
+export {AddPost, MyPost, Home, PasswordReset, Post, PostLoader, EditedPost, EditedPostLoader, Login, Signup, AllPost, CreatePasswordRecovery, AllPostLoader}

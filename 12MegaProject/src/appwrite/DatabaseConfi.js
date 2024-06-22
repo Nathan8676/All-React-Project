@@ -25,6 +25,7 @@ export class DatabaseConfi {
             })
         } catch (error) {
             console.log("this error is from DatabaseConfi::createPost", error);
+            return {error: error.message}
         }
     }
 
@@ -35,6 +36,7 @@ export class DatabaseConfi {
             })
         } catch (error) {
             console.log("this error is from DatabaseConfi::updatePost", error);
+            return {error: error.message}
         }
     }
 
@@ -48,21 +50,19 @@ export class DatabaseConfi {
 
     async getPost(slug){
         try {
-            return await this.databases.getDocument(config.DatabaseId, config.CollectionId, slug)
+            return await this.databases.getDocument(config.DatabaseId, config.CollectionId, slug )
         } catch (error) {
             console.log("this error is from DatabaseConfi::getPost", error);
-            const res = 'could not get post'
-            return res
+            return false
         }
     }
 
-    async listPosts(queries = Query.equal('STATUS', 'active')){
+    async listPosts(queries = [Query.equal('STATUS', 'active')]){
         try {
             return await this.databases.listDocuments(config.DatabaseId, config.CollectionId, queries)
         } catch (error) {
             console.log("this error is from DatabaseConfi::listPosts", error);
-            const res = 'could not get list of posts'
-            return res
+            return {error: error.message}
         }
     }
 

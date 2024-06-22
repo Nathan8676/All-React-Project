@@ -15,7 +15,7 @@ export class authService {
 
     async createAccount({email, password, name}){
         try {
-            const account = await this.account.create(ID.unique, email, password, name)
+            const account = await this.account.create(ID.unique(), email, password, name)
             if (account) {
                 return this.login({email, password})
             } else {
@@ -56,7 +56,8 @@ export class authService {
         try {
             return await this.account.createRecovery(userEmailId, passwordResetPage)
         } catch (error) {
-            console.log("this error is from authService::passworRecovery", error);
+            console.log("this error is from authService::passwordRecovery", error);
+            return {error: error.message}
         }
     }
 

@@ -11,12 +11,13 @@ function Signup() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [error, setError] = useState("")
-    const [register, handleSubmit] = useForm()
+    const {register, handleSubmit} = useForm()
     
-    const signup = async (data) => {
+    const Register = async (data) => {
+        console.log(data || "data")
         setError("")
         try {
-           const session = await AuthService.createAccount(data)
+           const session = await AuthService.createAccount({email: data.email, password: data.password, name: data.FullName})
            if(session){
             const userData = await AuthService.getCurrentUser()
             if(userData){
@@ -47,9 +48,9 @@ function Signup() {
                     Login
                 </Link>
             </p>
-        </div>
-        {error && <p className="text-red-600 mt-8 text-center" >{error}</p>}
-        <form onSubmit={handleSubmit(signup)} >
+      
+            {error && <p className="text-red-600 mt-8 text-center" >{error}</p>}
+          <form onSubmit={handleSubmit(Register)} >
             <div className='space-y-5'>
                 <Input
                 label = 'FullName:'
@@ -64,7 +65,7 @@ function Signup() {
                 })}
                 />
                 <Input
-                label = 'Email:'
+                label = 'email:'
                 type='email'
                 placeholder="Enter your email"
                 {...register('email', {
@@ -75,23 +76,23 @@ function Signup() {
                 })}
                 />
                 <Input
-                label = 'Password:'
+                label = 'password:'
                 type = 'password'
                 placeholder="Enter your password"
                 {...register('password', {
                     required: true,
-                    validate: {
-                        matchPattern: (value) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(value) || "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character",
-                    }
+                 
                 })}
                 />
                 <Button
-                children='Sign Up'
                 type='submit'
-                className='w-full'
-                />
+                className='w-full'>
+                    Signup
+                </Button>
+                
             </div>
-        </form>
+          </form> 
+        </div>
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import {Editor} from '@tinymce/tinymce-react'
+import { Editor } from '@tinymce/tinymce-react'
 import {Controller} from 'react-hook-form'
 
 function RTE({Name , control , label, defaultValue = ""}) {
@@ -8,10 +8,12 @@ function RTE({Name , control , label, defaultValue = ""}) {
     <div className='w-full'>
         {label && <label className='inline-block mb-1 pl-1'>{label}</label>}
         <Controller
-        name={Name || "Content"}
+        name={Name? Name : "content"}
         control={control}
         render={({field: {onChange}}) => (
             <Editor 
+            tinymceScriptSrc={"/tinymce/tinymce.min.js"}
+            licenseKey='gpl'
             initialValue={defaultValue}
             init={{
                 height:"500",
