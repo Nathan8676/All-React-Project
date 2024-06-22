@@ -1,7 +1,6 @@
 import React, { useState , useEffect} from 'react'
 import { Container, PostCard } from '../components'
 import databaseConfi from '../appwrite/DatabaseConfi'
-import { useSelector } from 'react-redux'
 import { Query } from 'appwrite'
 function Home() {
     const [posts, setPosts] = useState([]) 
