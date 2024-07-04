@@ -6,24 +6,19 @@ import { Link} from 'react-router-dom'
 import { Container, PostCard, Button } from '../components'
 
 function MyPost() {
-    const [posts, setPosts] = React.useState()
-    const  [loading, setLoading] = React.useState(true)
-    const userData = useSelector((state) => state.auth.userData)
-    React.useEffect(() => {
-        setLoading(true)
-            databaseConfi.listPosts([Query.equal('USERID', userData.$id)]).then((res) => {
-                if(res &&res.error){
-                    setPosts(res.error)
-                }else if(res.total===0){
-                    setPosts([]) 
-                }else{
-                    setPosts(res)
-                }
-            })
-            .finally(() => setLoading(false))
-    }, [])
+  const posts = useSelector(state => state.posts)
+  const loading = posts.AllUserPostLoading
+  const error = posts.AllUserPostError
+
+  if(error){
+    return (
+      <Container>
+        <h2 className=' text-center text-red-600 ' > {error} </h2>
+      </Container>
+    )
+  }else{
     if(!loading){
-        if (!posts || posts.length === 0) {
+        if (!posts.AllUserPost || posts.AllUserPost.length === 0) {
           return (
             <div className="w-full py-8 mt-4 text-center">
               <Container>
@@ -43,28 +38,28 @@ function MyPost() {
               </Container>
             </div>
           )
-        } else if(posts && posts.error) {
+        } else if(posts.AllUserPostError) {
           return (
             <div className="w-full py-8 mt-4 text-center">
               <Container>
                 <div className="flex flex-wrap justify-center">
                   <div className="p-2 w-full">
                     <h1 className="text-2xl font-bold hover:text-gray-500">
-                      {posts.error}
+                      {posts.AllUserPostError}
                     </h1>
                   </div>
                 </div>
               </Container>
             </div>
           )
-        } else if(posts) {
+        } else if(posts.AllUserPost) {
           return (
             <div className="w-full py-8">
               <Container>
-                  <h1>Total Post: {posts.total}</h1>
-                <div className="flex flex-wrap">
-                  {posts.documents?.map((post) => (
-                    <div key={post.$id}>
+                  <h1>Total Post: {posts.AllUserPost?.length}</h1>
+                <div className="flex flex-wrap max">
+                  {posts.AllUserPost?.map((post) => (
+                    <div key={post.$id} className='p-2 laptop:w-1/4 max-tablet:w-full w-1/2'>
                       <PostCard
                         $id={post.$id}
                         title={post.title}
@@ -93,6 +88,7 @@ function MyPost() {
             </div>
           )
     }
+  }
 }
 
 export default MyPost

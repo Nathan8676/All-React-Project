@@ -1,19 +1,14 @@
-import React, { useState , useEffect} from 'react'
+import React, { useState } from 'react'
 import { Container, PostCard } from '../components'
-import databaseConfi from '../appwrite/DatabaseConfi'
-import { Query } from 'appwrite'
+import { useDispatch, useSelector } from 'react-redux'
+import { postsFetch } from '../Store/postsSlice'
 function Home() {
-    const [posts, setPosts] = useState([]) 
-    const [loading, setLoading] = useState(true)
-    useEffect(() => {
-        setLoading(true)
-        databaseConfi.listPosts([Query.equal("STATUS", "active")]).then((res) => {
-            if(res){
-                setPosts(res.documents)
-            }
-        })
-        .finally(() => setLoading(false))
-    },[])
+    const isLogin = useSelector(state => state.auth.status)
+    const postsSlice = useSelector((state) => state.posts)
+    const[allPost , setAllPost] = useState(postsSlice.AllPost)
+    const[loading , setLoading] = useState(postsSlice.AllPostLoading)
+    const[error , setError] = useState(postsSlice.AllPostError)
+  if(isLogin){
     if(loading){
         return (
             <div className="w-full py-8 mt-4 text-center">
@@ -28,13 +23,27 @@ function Home() {
                 </Container>
             </div>
         )  
-    }else{
+    }else if(error){
+        return (
+            <div className="w-full py-8 mt-4 text-center">
+                <Container>
+                    <div className="flex flex-wrap">
+                        <div className="p-2 w-full">
+                            <h1 className="text-2xl font-bold hover:text-gray-500">
+                                {error}
+                            </h1>
+                        </div>
+                    </div>
+                </Container>
+            </div>
+        )
+    }else {
     return(
         <div className='w-full py-8'>
             <Container>
                 <div className='flex flex-wrap'>
-                {posts?.map((post) => (
-                    <div key={post.$id}>
+                {allPost?.map((post) => (
+                    <div key={post.$id} className='p-2 laptop:w-1/4 max-tablet:w-full w-1/2'>
                         <PostCard
                         $id={post.$id}
                         title={post.title}
@@ -46,6 +55,28 @@ function Home() {
             </Container>
         </div>
     )}
+  }else {
+    return (
+        <div className="w-full py-8 mt-4 text-center">
+            <Container>
+                <div className="flex flex-wrap">
+                    <div className="p-2 w-full">
+                        <h1 className="text-2xl font-bold hover:text-gray-500">
+                            Please Login To See Posts
+                        </h1>
+                    </div>
+                </div>
+            </Container>
+        </div>
+    )
+  }
 }
 
 export default Home
+
+
+/* export const HomePostsLoader = () => {
+    const dispatch = useDispatch()
+    dispatch(postsFetch())
+    
+} */

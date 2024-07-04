@@ -17,17 +17,17 @@ import {
   AddPost,
   PasswordReset,
   CreatePasswordRecovery as CreateRecovery,
-  EditedPostLoader,
-  AllPostLoader,
-  PostLoader,
 } from './Page/index.js'
+import { currentUserDataLoaderAndSessionData, homePostsLoader, SinglePostLoader, MyPostsLoader, AllPostsLoader } from './routeLoader/AllRouteLoader.js'
 
 const router = createBrowserRouter([
   {path: '/',
   element: <App />,
+  loader: currentUserDataLoaderAndSessionData,
   children:[
     {path: '/',
-    element: <Home />
+    element: <Home />,
+    loader: homePostsLoader,
     },
     {
       path: '/login',
@@ -51,7 +51,7 @@ const router = createBrowserRouter([
     },
     {
       path: '/post/:slug',
-      loader: PostLoader,
+      loader: SinglePostLoader,
       element: (
         <Protected
         authentication={true}
@@ -62,7 +62,7 @@ const router = createBrowserRouter([
     },
     {
       path: '/all-posts',
-      loader: AllPostLoader,
+      loader: AllPostsLoader,
       element: (
         <Protected
         authentication={true}
@@ -72,7 +72,6 @@ const router = createBrowserRouter([
     },
       {
         path: '/post/edit/:slug',
-        loader: EditedPostLoader,
         element: (
           <Protected
           authentication={true}
@@ -109,6 +108,7 @@ const router = createBrowserRouter([
     },
     {
       path : '/my-posts',
+      loader: MyPostsLoader,
       element: (
         <Protected
         authentication={true}

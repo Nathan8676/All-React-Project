@@ -1,27 +1,16 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Header, Footer } from './components/index'
-import { useDispatch} from 'react-redux'
+import { useSelector} from 'react-redux'
 import { Outlet } from 'react-router-dom'
-import { login, logout } from './Store/authSlice'
-import AuthService from './appwrite/auth'
-
 
 function App() {
-  const dispatch = useDispatch()
-  const [loading, setLoading] = useState(true)
+  const auth = useSelector((state) => state.auth)
+  const isLoading = auth.loading
   useEffect(() => {
-      AuthService.getCurrentUser()
-      .then((userData) => {
-        if (userData) {
-          dispatch(login(userData))
-        } else {
-          dispatch(logout())
-        } 
-      })
-      .finally(() => setLoading(false))
+    // currentUserDataLoader()
   }, [])
 
-  return !loading ? (
+  return !isLoading ? (
     <>
     <div className='min-h-screen flex flex-wrap content-between bg-blue-950
     text-white text-center text-3xl'>
@@ -42,3 +31,15 @@ function App() {
 }
 
 export default App
+
+/* export const currentUserDataLoader = function() {
+  const dispatch = useDispatch()
+  dispatch(fetchUserData()).then((data) => {
+    if(data){
+      dispatch(loginUser(data))
+    }else{
+      dispatch(logoutUser())
+    }
+   }
+  )
+} */

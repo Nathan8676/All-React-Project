@@ -1,30 +1,26 @@
 import React, {useState} from 'react'
-import {login as StoreLogin} from '../Store/authSlice'
-import {useDispatch} from 'react-redux'
+import { loginUser } from '../Store/authSlice'
+import {useDispatch , useSelector} from 'react-redux'
 import {useNavigate , Link} from 'react-router-dom'
-import AuthService from '../appwrite/auth'
 import {Logo, Button, Input} from './index'
 import {useForm} from 'react-hook-form'
+import { FaTruckLoading } from 'react-icons/fa'
 function Login() {
+    const auth = useSelector((state) => state.auth)
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const [error , setError] = useState("")
+    const [loading , setLoading] = useState(auth.loading)
+    const [error , setError] = useState(auth.error)
     const {register, handleSubmit} = useForm()
 
     const login = async (data) => {
-        try {
-            setError("")
-            const session = await AuthService.login({email: data.email, password: data.password})
-            if(session){
-               const userData = await AuthService.getCurrentUser()
-               if(userData){
-                dispatch(StoreLogin(userData))
-                navigate('/')
-               }
-            }
-        } catch (error) {
-            setError(error.message)
-        }
+        setLoading(auth.loading)
+       const session = dispatch(loginUser({...data}))
+       if(session){
+        navigate('/')
+       }else if(session === session.error){
+        setError(auth.error)
+       }
     }
 
   return (
@@ -79,11 +75,9 @@ function Login() {
                         required: true,
                     })}
                     />
-                    <Button
-                    children="Login"
-                    type='submit'
-                    className='w-full'
-                    />
+                    <Button type='submit' className='w-full'>
+                        {loading ? <FaTruckLoading className='animate-spin' /> : "Login"}
+                    </Button>
                 </div>
             </form>
         </div>

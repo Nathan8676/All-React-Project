@@ -1,25 +1,45 @@
 import React, { useEffect, useState } from 'react'
 import {PostForms, Container} from '../components'
-import { useParams, useNavigate, useLoaderData } from 'react-router-dom'
-import databaseConfi from '../appwrite/DatabaseConfi'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { getPost } from '../Store/postsSlice'
+import { Query } from 'appwrite'
+import { FaTruckLoading } from 'react-icons/fa'
 
 function EditedPost() {
-    const Post = useLoaderData()
-    
-   /*  const Navigate = useNavigate()
+    const Post = useSelector(state => state.posts.singlePost)
+    const error = useSelector(state => state.posts.singlePostError)
+    const loading = useSelector(state => state.posts.singlePostLoading)
+    const userData = useSelector(state => state.auth.userData)
     const {slug} = useParams()
+    const dispatch = useDispatch()
     useEffect(() => {
-    if(slug){
-        databaseConfi.getPost(slug).then((post) => {
-          if(post){
-              setPost(post)
+        if(!Post){
+          const queries = [Query.equal('USERID', userData?.$id)]
+          const singlePost = dispatch(getPost({Id: slug, queries: queries}))
+          if(singlePost && singlePost.error){
+            console.log(singlePost.error)
+            return
           }
-        })
-        
+        }
+    }, [slug])
+    if(loading){
+        return (
+            <div className='py-8'>
+                <Container>
+                    <FaTruckLoading className='text-4xl text-blue-500 animate-spin'/>
+                </Container>
+            </div>
+        )
+    }else if (error) {
+        return (
+            <div className='py-8'>
+                <Container>
+                    <h1>{error}</h1>
+                </Container>
+            </div>
+        )
     }else {
-        Navigate("/")
-    }
-    }, [slug, Navigate]) */
   return Post ? (
    <div className='py-8'>
       <Container>
@@ -33,17 +53,7 @@ function EditedPost() {
       </Container>
     </div>
   )
-  
+}
 }
 
 export default EditedPost
-
-export const EditedPostLoader = async ({params}) => {
-    const {slug} = params
-    if(slug){
-      const post = await databaseConfi.getPost(slug)
-      return post
-    }else{
-      navigator("/")
-    }
-}

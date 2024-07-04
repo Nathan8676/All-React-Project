@@ -1,40 +1,59 @@
 import React, { useEffect} from 'react'
-import { useParams, useNavigate, Link, useLoaderData } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import parse from 'html-react-parser'
-import { Container, Button } from '../components/index'
 import databaseConfi from '../appwrite/DatabaseConfi'
-import { useSelector } from 'react-redux'
+import { Container, Button } from '../components/index'
+import { useDispatch, useSelector } from 'react-redux'
+import {FaEdit, FaTrash , FaTruckLoading} from 'react-icons/fa'
+import { deletePost } from '../Store/postsSlice'
 function Post() {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     const userData = useSelector(state => state.auth.userData)
-    const Post = useLoaderData()
-/*     const Navigate = useNavigate()
-  
+    const Posts = useSelector(state => state.posts) 
+    const Post = useSelector(state => state.posts.singlePost)
+    const [isMobile , setIsMobile] = React.useState(window.innerWidth < 650)
     
     useEffect(() => {
-        if(slug){
-            databaseConfi.getPost(slug).then((res) => {
-                if(res){
-                    setPost(res)
-                    console.log('res' ,res)
-                }
-            })
+        const handleResize = () => {
+          console.log(Post)
+            setIsMobile(window.innerWidth < 650)
+        } 
+
+        window.addEventListener('resize', handleResize) 
+
+        return () => {
+            window.removeEventListener('resize', handleResize)
         }
-    } , [slug, Navigate]) */
+
+    } , []) 
 
     const isAuthor = Post && userData? Post.USERID === userData.$id : false
-    const inActiveNotAuthor = Post.STATUS === "inactive" && !isAuthor
+    const inActiveNotAuthor = Post && Post.STATUS === "inactive" && !isAuthor
 
-    const deletePost =  () => {
-         databaseConfi.deletePost(Post.$id).then((status) => {
-            if(status){
-                databaseConfi.deleteFile(Post.FEATUREDIMG)
-                    Navigate('/')
-            }
-         })
+    const RemovePost =  () => {
+      console.log(Post.FEATUREDIMG)
+    dispatch(deletePost( {Id: Post.$id , FEATUREDIMG: Post.FEATUREDIMG})).then(() => {
+        console.log("Post deleted")
+        navigate('/')
+    })
+    
     }
 
-
-  return Post ? inActiveNotAuthor? (
+if(Posts?.singlePostLoading){ 
+  return (
+    <div className='py-8 '>
+        <Container className='flex justify-center align-center' >
+            <FaTruckLoading className='text-4xl text-blue-500 animate-spin center'/>
+        </Container>
+    </div>
+  )
+}else{
+  return Posts?.singlePostError ? (
+    <Container>
+        <h2 className=' text-center text-red-600 ' > {Posts.singlePostError} </h2>
+    </Container>
+  ): Post ? inActiveNotAuthor? (
     <Container>
         <h2 className=' text-center ' >Post is Private</h2>
     </Container>
@@ -44,25 +63,45 @@ function Post() {
      {isAuthor && (
          <div className='w-full flex justify-end'>
              <Link to={`/post/edit/${Post.$id}`}>
+             {isMobile?(
+                <Button
+                children={<FaEdit />}
+                bgColor="bg-green-500"
+                textColor="text-white"
+                type="button"
+            />
+          ):(
+            <Button
+            children="Edit"
+            bgColor="bg-green-500"
+            textColor="text-white"
+            type="button"
+            />
+
+          )}
+             </Link>
+
+          {isMobile?(
              <Button
-             children="Edit"
+             children={<FaTrash />}
              bgColor="bg-green-500"
              textColor="text-white"
              type="button"
-             />
-             </Link>
-
-             <Button
-             children="Delete"
-             bgColor="bg-red-500"
-             textColor="text-white"
-             type="button"
-             onClick={deletePost}
-             />
+             onClick={RemovePost}
+         />
+          ):(
+            <Button
+            children="Delete"
+            bgColor="bg-red-500"
+            textColor="text-white"
+            type="button"
+            onClick={RemovePost}
+            />
+          )}
          </div>
      )}
-      <div className='w-full flex justify-center mb-4 py-2 rounded-lg border'>
-          <img src={databaseConfi.getFilePreview(Post.FEATUREDIMG)} alt={Post.title} className='w-full rounded-lg' />
+      <div className='w-full flex justify-center  rounded-lg border '>
+          <img src={databaseConfi.getFilePreview(Post.FEATUREDIMG)} alt={Post.title} className='w-full rounded-lg size-auto' />
       </div>
 
       <div className='w-full mb-6'>
@@ -84,17 +123,7 @@ function Post() {
   )
 
 
-
+}
 }
 
 export default Post
-
-export const PostLoader = async ({params}) => {
-    const {slug} = params
-    if(slug){
-      const post = await databaseConfi.getPost(slug)
-      return post
-    }else{
-      navigator("/")
-    }
-}

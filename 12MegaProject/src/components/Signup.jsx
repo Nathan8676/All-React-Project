@@ -1,34 +1,31 @@
 import React, { useState } from 'react'
-import AuthService from '../appwrite/auth'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {Logo, Input, Button} from './index'
 import {useForm} from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
-import { login as StoreLogin } from '../Store/authSlice'
+import { signupUser} from '../Store/authSlice'
+import {FaTruckLoading} from 'react-icons/fa'
 
 
 function Signup() {
+    const auth = useSelector((state) => state.auth)
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const [loading, setLoading] = useState(auth.loading)
     const [error, setError] = useState("")
     const {register, handleSubmit} = useForm()
     
     const Register = async (data) => {
-        console.log(data || "data")
-        setError("")
-        try {
-           const session = await AuthService.createAccount({email: data.email, password: data.password, name: data.FullName})
+        setLoading(auth.loading)
+        setError(auth.error)
+           const session = dispatch(signupUser({...data}))
            if(session){
-            const userData = await AuthService.getCurrentUser()
-            if(userData){
-                dispatch(StoreLogin(userData))
-                navigate('/')
-            }
+            setLoading(auth.loading)
+            navigate('/')
+           }else if(session === session.error){
+            setError(auth.error)
            }
-        } catch (error) {
-            setError(error.message)
         }
-    }
 
   return (
     <div className='flex items-center justify-center'>
@@ -56,7 +53,7 @@ function Signup() {
                 label = 'FullName:'
                 type='text'
                 placeholder="Enter your full name"
-                {...register('FullName', {
+                {...register('name', {
                     required: true,
                     maxLength: 25,
                     Validate: {
@@ -87,7 +84,7 @@ function Signup() {
                 <Button
                 type='submit'
                 className='w-full'>
-                    Signup
+                    {loading ? <FaTruckLoading className='animate-spin' /> : "Sign Up"}
                 </Button>
                 
             </div>

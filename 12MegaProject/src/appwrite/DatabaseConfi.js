@@ -18,9 +18,9 @@ export class DatabaseConfi {
     }
 
     // database functions Posts related functions/methods
-    async createPost({title, slug, content, coverImage, userID, status}){
+    async createPost({title, content, coverImage, userID, status}){
         try {
-            return await this.databases.createDocument(config.DatabaseId, config.CollectionId, slug, {
+            return await this.databases.createDocument(config.DatabaseId, config.CollectionId, ID.unique(), {
                 title: title, content:content, FEATUREDIMG:coverImage, USERID:userID, STATUS:status
             })
         } catch (error) {
@@ -29,9 +29,10 @@ export class DatabaseConfi {
         }
     }
 
-    async updatePost(slug, {title, content, coverImage, status}){
+    async updatePost(Id, {title, content, coverImage, status}){
         try {
-            return await this.databases.updateDocument(config.DatabaseId, config.CollectionId, slug, {
+            console.log({title, content, coverImage, status})
+            return await this.databases.updateDocument(config.DatabaseId, config.CollectionId, Id, {
                 title: title, content:content, FEATUREDIMG:coverImage,  STATUS:status
             })
         } catch (error) {
@@ -40,20 +41,21 @@ export class DatabaseConfi {
         }
     }
 
-    async deletePost(slug){
+    async deletePost(Id){
         try {
-            return await this.databases.deleteDocument(config.DatabaseId, config.CollectionId, slug)
+            return await this.databases.deleteDocument(config.DatabaseId, config.CollectionId, Id)
         } catch (error) {
             console.log("this error is from DatabaseConfi::deletePost", error);
+            return {error: error.message}
         }
     }    
 
-    async getPost(slug){
+    async getPost({id , queries = []}){
         try {
-            return await this.databases.getDocument(config.DatabaseId, config.CollectionId, slug )
+            return await this.databases.getDocument(config.DatabaseId, config.CollectionId, id , queries)
         } catch (error) {
             console.log("this error is from DatabaseConfi::getPost", error);
-            return false
+            return {error: error.message}
         }
     }
 
@@ -82,7 +84,7 @@ export class DatabaseConfi {
             return true
         } catch (error) {
             console.log("this error is from DatabaseConfi::deleteFile", error);
-            return false
+            return {error: error.message}
         }
     }
 
@@ -91,7 +93,7 @@ export class DatabaseConfi {
             return this.storage.getFilePreview(config.BucketId, fileId)
         } catch (error) {
             console.log("this error is from DatabaseConfi::getFilePreview", error);
-            return false
+            return {error: error.message}
         }
     }
 

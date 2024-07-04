@@ -1,15 +1,32 @@
-import React , {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import { Container,PostCard} from '../components'
-import databaseConfi from '../appwrite/DatabaseConfi'
-import { useLoaderData } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 function AllPost() {
-    const posts = useLoaderData()
+
+    const postsSlice = useSelector(state => state.posts)
+    const[allPost , setAllPost] = useState(postsSlice.AllPost)
+    const[error , setError] = useState(postsSlice.AllPostError)
+if(error){
+    return (
+        <div className='w-full py-8 mt-4 text-center'>
+            <Container>
+                <div className='flex flex-wrap'>
+                    <div className='p-2 w-full'>
+                        <h1 className='text-2xl font-bold hover:text-gray-500'>
+                            {error}
+                        </h1>
+                    </div>
+                </div>
+            </Container>
+        </div>
+    )
+}
   return (
     <div className='w-full py-8' >
         <Container>
             <div className='flex flex-wrap'>
-            {posts.documents?.map((post) => (
-                <div key={post.$id}>
+            {allPost?.map((post) => (
+                <div key={post.$id} className='p-2 laptop:w-1/4 max-tablet:w-full w-1/2' >
                     <PostCard
                     $id={post.$id}
                     title={post.title}
@@ -17,7 +34,7 @@ function AllPost() {
                     />
                 </div>
             ))}
-            { !posts && <h2 className=' text-center ' >There is no Post Active</h2>}
+            { !allPost && <h2 className=' text-center ' >There is no Post Active</h2>}
             </div>
         </Container>
     </div>
@@ -27,7 +44,3 @@ function AllPost() {
 export default AllPost
 
 
-export const AllPostLoader = async () => {
-    const posts = await databaseConfi.listPosts()
-    return posts
-}

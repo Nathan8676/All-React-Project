@@ -17,12 +17,15 @@ export class authService {
         try {
             const account = await this.account.create(ID.unique(), email, password, name)
             if (account) {
-                return this.login({email, password})
+                const sessionData = await this.login({email, password})
+                return {sessionData, userData: account}
+                
             } else {
                 return account;
             }
         } catch (error) {
             console.log("this error is from authService::createAccount", error);
+            return {error: error.message}
         }
     }
 
@@ -31,6 +34,7 @@ export class authService {
            return await this.account.createEmailPasswordSession(email, password);
         } catch (error) {
             console.log("this error is from authService::login", error);
+            return {error: error.message}
         }
     }
 
@@ -39,9 +43,10 @@ export class authService {
             return await this.account.get();
         } catch (error) {
             console.log("this error is from authService::getCurrentUser", error);
+            return {error: error.message}
             
         }
-        return null;
+        
     }
 
     async logout(){
@@ -49,6 +54,7 @@ export class authService {
             return await this.account.deleteSession("current")
         } catch (error) {
             console.log("this error is from authService::logout", error);
+            return {error: error.message}
         }
     }
 
@@ -66,8 +72,18 @@ export class authService {
             return await this.account.updateRecovery(userId, secretCode, newPassword, newPasswordConfirm)
         } catch (error) {
             console.log("this error is from authService::updateRecovery", error);
+            return {error: error.message}
         }
     }    
+
+    async getCurrentUserSession(){
+        try {
+            return await this.account.getSession("current")
+        } catch (error) {
+            console.log("this error is from authService::getCurrentUserSession", error);
+            return {error: error.message}
+        }
+    }
 }
 
 
