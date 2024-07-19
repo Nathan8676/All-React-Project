@@ -1,5 +1,5 @@
 import databaseConfi  from '../../appwrite/DatabaseConfi'
-import React, {useCallback, useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import {useForm} from 'react-hook-form'
 import {useNavigate} from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -87,7 +87,7 @@ function PostForms({Post}) {
 
   return (
     <form  onSubmit={handleSubmit(post)} className='flex flex-wrap'>
-      <div className="w-2/3 px-2">
+      <div className="w-2/3 px-2 max-mobile:w-full">
           <Input
             type="text"
             name="title"
@@ -98,7 +98,7 @@ function PostForms({Post}) {
           
           <RTE control={control} Name="Content" label="Content :" defaultValue={Post? Post.content : getValues("Content")} />
       </div>
-      <div className="w-1/3 px-2">
+      <div className="w-1/3 px-2 max-mobile:w-full">
         {error && <p className="text-red-500 text-2xl text-center">could't create post because {error}</p>}
             <Input
               type="file"

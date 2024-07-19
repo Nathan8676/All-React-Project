@@ -1,30 +1,27 @@
-// loaders.js
-import store  from '../Store/store'; // Assuming you have a configured store
+import store  from '../Store/store'; 
 import { fetchUserDataAndSessionData } from '../Store/authSlice';
 import { postsFetch ,getPost, userPost } from '../Store/postsSlice';
-export const currentUserDataLoaderAndSessionData = async () => {
-  const { dispatch, getState } = store;
-  const auth = getState().auth
-  if(auth.userData === null && auth.sessionData === null){
-    await dispatch(fetchUserDataAndSessionData())   
-  }
-  return null;
-};
 
-export const homePostsLoader = async () => {
+export const combinedLoader = async () => {
   const { dispatch, getState } = store;
-  const posts = getState().posts.AllPost
-  if(posts.length <= 0 ){
-  await dispatch(postsFetch());
+  const auth = getState().auth 
+  if(auth.userData === null || auth.sessionData === null){
+    await dispatch(fetchUserDataAndSessionData())
+    const isloggedIn = getState().auth.status
+    const posts = getState().posts.AllPost
+    if(posts.length <= 0 && isloggedIn ){
+    await dispatch(postsFetch())
+    }
   }
   return null;
-};
+}
 
 export const AllPostsLoader = async () => {
   const { dispatch, getState } = store;
   await waitForUserDataAndSessionData();
+  const auth = getState().auth
   const posts = getState().posts.AllPost
-  if(posts.length <= 0 ){
+  if(posts.length <= 0 && !auth.error ){
   await dispatch(postsFetch());
   }
   return null;

@@ -110,7 +110,25 @@ const initialState = {
 const postsSlice= createSlice({
     name: "posts",
     initialState,
-    reducers: {},
+    reducers: {
+        clearPostsSlice: (state) => {
+        state.AllPost =  []
+        state.AllPostLoading =  false
+        state.AllPostError = null
+        state.singlePost = null
+        state.singlePostLoading =  false
+        state.singlePostError = null
+        state.AllUserPost = []
+        state.AllUserPostError = null
+        state.AllUserPostLoading = false
+        state.addPostLoading = false
+        state.addPostError = null
+        state.updatePostLoading = false
+        state.updatePostError = null
+        state.deletePostLoading = false
+        state.deletePostError = null
+        },
+    },
     extraReducers: (builder) => {
         builder
         .addCase(postsFetch.pending, (state) => {
@@ -200,5 +218,7 @@ const postsSlice= createSlice({
     }
 
 })
+
+export const {clearPostsSlice} = postsSlice.actions
 
 export default postsSlice.reducer

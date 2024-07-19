@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, NavLink, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Container, Logo, Logoutbtn } from "../index";
+import { Container, Logo, Logoutbtn, ThemeSwitcherBtn } from "../index";
 
 function Header() {
   const [isNavbar, setIsNavbar] = useState(window.innerWidth < 900);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isloggedIn = useSelector(state => state.auth.status);
   const navigate = useNavigate();
+  const Location = useLocation()
 
   useEffect(() => {
     const handleResize = () => {
@@ -32,7 +33,7 @@ function Header() {
 
   if (!isNavbar) {
     return (
-      <header className='py-3 shadow bg-gray-500'>
+      <header className='py-3 shadow bg-blue-950 dark:bg-black '>
         <Container>
           <nav className='flex '>
             <div className='mr-4'>
@@ -44,10 +45,18 @@ function Header() {
               {navitem.map((item) => (
                 item.active ? (
                   <li key={item.name}>
-                    <button
-                      className='inline-block px-6 py-2 duration-200 hover:bg-blue-100 rounded-full'
-                      onClick={() => navigate(item.slug)}
-                    >{item.name}</button>
+                    {Location.pathname === item.slug ?(
+                    <span className='cursor-pointer select-none inline-block px-6 py-2 duration-200 hover:bg-blue-400 text-white bg-blue-400 rounded-full'>
+                      {item.name}
+                    </span>
+                    ): (
+                   <NavLink
+                    to={item.slug}
+                    className={({ isActive }) => `inline-block px-6 py-2 duration-200 hover:bg-blue-400 text-white ${isActive ? 'bg-blue-400': '' } rounded-full`}
+  
+                    >{item.name}
+                   </NavLink>
+                    )}
                   </li>
                 ) : null
               ))}
@@ -56,6 +65,9 @@ function Header() {
                   <Logoutbtn />
                 </li>
               )}
+              <li>
+                <ThemeSwitcherBtn />
+              </li>
             </ul>
           </nav>
         </Container>
@@ -63,7 +75,7 @@ function Header() {
     );
   } else {
     return (
-      <header className='py-3 shadow bg-gray-500'>
+      <header className='py-3 shadow bg-blue-950 dark:bg-black'>
         <Container>
           <nav className='flex justify-between items-center'>
             <div className='mr-4'>
@@ -78,7 +90,7 @@ function Header() {
               Menu
             </button>
             <div
-              className={`fixed inset-0 bg-gray-500 bg-opacity-75 z-50 transition-transform transform ${
+              className={`fixed inset-0 bg-gray-500 z-50 transition-transform transform ${
                 isMenuOpen ? 'translate-x-0 overflow-scroll' : 'translate-x-full'
               }`}
             >
@@ -94,13 +106,19 @@ function Header() {
                 {navitem.map((item) => (
                   item.active ? (
                     <li key={item.name} className="mb-4">
-                      <button
-                        className='inline-block px-6 py-2 duration-200 hover:bg-blue-100 rounded-full text-white'
-                        onClick={() => {
-                          navigate(item.slug);
-                          setIsMenuOpen(false);
-                        }}
-                      >{item.name}</button>
+                      {Location.pathname === item.slug ? (
+                        <span className='cursor-pointer select-none inline-block px-6 py-2 duration-200 hover:bg-blue-400 text-white bg-blue-400 rounded-full'>
+                        {item.name}
+                      </span>
+                      ):(
+                        <button
+                          className='inline-block px-6 py-2 duration-200 hover:bg-blue-100 rounded-full text-white'
+                          onClick={() => {
+                            navigate(item.slug);
+                            setIsMenuOpen(false);
+                          }}
+                        >{item.name}</button>
+                      )}
                     </li>
                   ) : null
                 ))}
@@ -109,6 +127,9 @@ function Header() {
                     <Logoutbtn />
                   </li>
                 )}
+                <li>
+                <ThemeSwitcherBtn />
+              </li>
               </ul>
             </div>
           </nav>

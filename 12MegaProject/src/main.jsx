@@ -18,16 +18,15 @@ import {
   PasswordReset,
   CreatePasswordRecovery as CreateRecovery,
 } from './Page/index.js'
-import { currentUserDataLoaderAndSessionData, homePostsLoader, SinglePostLoader, MyPostsLoader, AllPostsLoader } from './routeLoader/AllRouteLoader.js'
+import { combinedLoader, SinglePostLoader, MyPostsLoader, AllPostsLoader } from './routeLoader/AllRouteLoader.js'
 
 const router = createBrowserRouter([
   {path: '/',
   element: <App />,
-  loader: currentUserDataLoaderAndSessionData,
+  loader: combinedLoader,
   children:[
     {path: '/',
     element: <Home />,
-    loader: homePostsLoader,
     },
     {
       path: '/login',

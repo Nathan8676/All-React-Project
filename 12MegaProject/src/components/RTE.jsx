@@ -1,9 +1,9 @@
 import React from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 import {Controller} from 'react-hook-form'
-
+import { useSelector } from 'react-redux'
 function RTE({Name , control , label, defaultValue = ""}) {
-
+const {isDarkMode} = useSelector((state) => state.theme)
   return (
     <div className='w-full'>
         {label && <label className='inline-block mb-1 pl-1'>{label}</label>}
@@ -27,7 +27,14 @@ function RTE({Name , control , label, defaultValue = ""}) {
                 'bold italic backcolor | alignleft aligncenter ' +
                 'alignright alignjustify | bullist numlist outdent indent | ' +
                 'removeformat | help',
-                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+                content_style:    
+                `body {
+                  @apply ${isDarkMode ? 'bg-zinc-950 border-black text-white' : 'bg-white text-black'};
+                  font-family: Helvetica, Arial, sans-serif;
+                  font-size: 14px;
+                }`,
+                content_css_cors: true
+             
             }}
             onEditorChange={onChange}
             
@@ -39,3 +46,6 @@ function RTE({Name , control , label, defaultValue = ""}) {
 }
 
 export default RTE
+
+
+// should fix the fetch posts problem and auth error

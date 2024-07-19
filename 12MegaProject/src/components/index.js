@@ -14,4 +14,5 @@ import PasswordReset from "./PasswordReset";
 import PostForms from "./PostForms/PostForms";
 import UpdatePassword from "./UpdatePassword";
 import Login from "./Login";
-export {UpdatePassword, Logoutbtn, PostForms, Button, Header, Footer, Container, Logo, Login, Input, Select, RTE, Protected, PostCard, Signup, PasswordReset}
+import ThemeSwitcherBtn from "./ThemeSwitcherBtn";
+export {UpdatePassword, ThemeSwitcherBtn, Logoutbtn, PostForms, Button, Header, Footer, Container, Logo, Login, Input, Select, RTE, Protected, PostCard, Signup, PasswordReset}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {Logo, Input, Button} from './index'
 import {useForm} from 'react-hook-form'
@@ -6,41 +6,37 @@ import { Link, useNavigate } from 'react-router-dom'
 import { signupUser} from '../Store/authSlice'
 import {FaTruckLoading} from 'react-icons/fa'
 
-
 function Signup() {
     const auth = useSelector((state) => state.auth)
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const [loading, setLoading] = useState(auth.loading)
-    const [error, setError] = useState("")
+    const loading = auth.loading
+    const error = auth.signupError
     const {register, handleSubmit} = useForm()
     
     const Register = async (data) => {
-        setLoading(auth.loading)
-        setError(auth.error)
            const session = dispatch(signupUser({...data}))
-           if(session){
-            setLoading(auth.loading)
+           if(session === session.error){
+            return
+           }else if(session){
             navigate('/')
-           }else if(session === session.error){
-            setError(auth.error)
-           }
+           } 
         }
 
   return (
     <div className='flex items-center justify-center'>
-        <div className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}>
+        <div className={`mx-auto w-full max-w-lg dark:bg-zinc-950 dark:text-white dark:border-black bg-gray-100 rounded-xl p-10 border border-black/10`}>
             <div  className="mb-2 flex justify-center" >
                 <span className="mb-2 flex justify-center" >
                     <Logo width="100%" />
                 </span>
             </div>
             <h2 className="text-center text-2xl font-bold leading-tight">Make a New account</h2>
-            <p className="mt-2 text-center text-base text-black/60">
+            <p className="mt-2 text-center text-base dark:text-white text-black/60">
                  Already have an account?&nbsp;
                 <Link
                     to="/login"
-                    className="font-medium text-primary transition-all duration-200 hover:underline"
+                    className="font-medium dark:text-white text-primary transition-all duration-200 hover:underline"
                 >
                     Login
                 </Link>

@@ -6,7 +6,9 @@ const initialState = {
     sessionData: null,
     userData: null,
     loading: false,
-    error: null
+    error: null,
+    loginError: null,
+    signpuError: null,
 }
 
 export const loginUser = createAsyncThunk(
@@ -68,17 +70,18 @@ const authSlice = createSlice({
         builder
         .addCase(loginUser.pending, (state) => {
             state.loading = true
-            state.error = null
+            state.loginError = null
         })
         .addCase(loginUser.fulfilled, (state, action) => {
             state.loading = false
             state.sessionData = action.payload
             state.status = true
+            state.loginError = null
             state.error = null
         })
         .addCase(loginUser.rejected, (state, action) => {
             state.loading = false
-            state.error = action.error.message
+            state.loginError = action.error.message
         })
         .addCase(logoutUser.pending, (state) => {
             state.loading = true
@@ -90,6 +93,8 @@ const authSlice = createSlice({
             state.userData = null
             state.status = false
             state.error = null
+            state.loginError = null
+            state.signpuError = null
         })
         .addCase(logoutUser.rejected, (state, action) => {
             state.loading = false
@@ -115,18 +120,18 @@ const authSlice = createSlice({
         })
         .addCase(signupUser.pending, (state) => {
             state.loading = true
-            state.error = null
+            state.signpuError = null
         })
         .addCase(signupUser.fulfilled, (state, action) => {
             state.loading = false
             state.sessionData = action.payload.sessionData,
             state.userData = action.payload.userData
             state.status = true
-            state.error = null
+            state.signpuError = null
         })
         .addCase(signupUser.rejected, (state, action) => {
             state.loading = false
-            state.error = action.error.message
+            state.signpuError = action.error.message
         })
     }
 })

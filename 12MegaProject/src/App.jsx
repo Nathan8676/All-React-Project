@@ -6,14 +6,20 @@ import { Outlet } from 'react-router-dom'
 function App() {
   const auth = useSelector((state) => state.auth)
   const isLoading = auth.loading
+  const isDarkMode = useSelector((state) => state.theme.isDarkMode)
   useEffect(() => {
-    // currentUserDataLoader()
-  }, [])
-
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark')
+    }else{
+      document.documentElement.classList.remove('dark')
+    }
+  }, [isDarkMode])
+  
+  
   return !isLoading ? (
     <>
-    <div className='min-h-screen flex flex-wrap content-between bg-blue-950
-    text-white text-center text-3xl'>
+    <div className='min-h-screen flex flex-wrap content-between bg-gray-300 dark:bg-slate-950 dark:text-white
+    text-black text-center text-3xl'>
       <div className='w-full block'>
         <Header />
         <main>
@@ -31,15 +37,3 @@ function App() {
 }
 
 export default App
-
-/* export const currentUserDataLoader = function() {
-  const dispatch = useDispatch()
-  dispatch(fetchUserData()).then((data) => {
-    if(data){
-      dispatch(loginUser(data))
-    }else{
-      dispatch(logoutUser())
-    }
-   }
-  )
-} */

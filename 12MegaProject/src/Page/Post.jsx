@@ -16,7 +16,6 @@ function Post() {
     
     useEffect(() => {
         const handleResize = () => {
-          console.log(Post)
             setIsMobile(window.innerWidth < 650)
         } 
 
@@ -67,14 +66,14 @@ if(Posts?.singlePostLoading){
                 <Button
                 children={<FaEdit />}
                 bgColor="bg-green-500"
-                textColor="text-white"
+                textColor="text-white dark:text-gray-400"
                 type="button"
             />
           ):(
             <Button
             children="Edit"
             bgColor="bg-green-500"
-            textColor="text-white"
+            textColor="text-white dark:text-gray-400"
             type="button"
             />
 
@@ -85,7 +84,7 @@ if(Posts?.singlePostLoading){
              <Button
              children={<FaTrash />}
              bgColor="bg-green-500"
-             textColor="text-white"
+             textColor="text-white dark:text-gray-400"
              type="button"
              onClick={RemovePost}
          />
@@ -93,7 +92,7 @@ if(Posts?.singlePostLoading){
             <Button
             children="Delete"
             bgColor="bg-red-500"
-            textColor="text-white"
+            textColor="text-white dark:text-white"
             type="button"
             onClick={RemovePost}
             />
@@ -108,7 +107,7 @@ if(Posts?.singlePostLoading){
           <h1 className='text-2xl font-bold'>{Post.title}</h1>
       </div>
 
-      <div className='browser-css'>
+      <div className='browser-css text-black dark:text-white'>
           {parse(Post.content)}
       </div>
 

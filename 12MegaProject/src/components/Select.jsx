@@ -20,7 +20,7 @@ const id = useId()
             id={id}
             {...props}
             ref={ref}
-            className={`px-2 py-3 rounded-lg bg-white text-black focus:bg-gray-50 
+            className={`px-2 py-3 rounded-lg dark:bg-zinc-950 dark:text-white dark:border-black bg-white text-black focus:bg-gray-50 
             duration-200 border border-gray-50 w-full ${className} `}
             >
             {options?.map((option) => (

@@ -5,8 +5,8 @@ import { postsFetch } from '../Store/postsSlice'
 function Home() {
     const isLogin = useSelector(state => state.auth.status)
     const postsSlice = useSelector((state) => state.posts)
-    const[allPost , setAllPost] = useState(postsSlice.AllPost)
-    const[loading , setLoading] = useState(postsSlice.AllPostLoading)
+    const allPost = postsSlice.AllPost
+    const loading = postsSlice.AllPostLoading
     const[error , setError] = useState(postsSlice.AllPostError)
   if(isLogin){
     if(loading){
@@ -58,16 +58,15 @@ function Home() {
   }else {
     return (
         <div className="w-full py-8 mt-4 text-center">
-            <Container>
-                <div className="flex flex-wrap">
-                    <div className="p-2 w-full">
-                        <h1 className="text-2xl font-bold hover:text-gray-500">
-                            Please Login To See Posts
-                        </h1>
-                    </div>
-                </div>
-            </Container>
-        </div>
+        <Container>
+          <div className="flex flex-col min-h-screen justify-center items-center">
+            <div className="text-2xl font-bold hover:text-gray-500">
+              Please Login To See Posts
+            </div>
+          </div>
+        </Container>
+      </div>
+      
     )
   }
 }
