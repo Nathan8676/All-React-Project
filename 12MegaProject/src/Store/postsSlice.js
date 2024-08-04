@@ -177,7 +177,7 @@ const postsSlice= createSlice({
         .addCase(deletePost.fulfilled, (state, action) => {
             state.deletePostLoading = false 
             state.AllPost = state.AllPost.filter((post) => post.$id !== action.payload)
-            if(state.post && state.post.$id == action.payload){
+            if(state.singlePost && state.singlePost.$id == action.payload){
                 state.singlePost = null
                 state.singlePostError = null 
                 state.singlePostLoading = false

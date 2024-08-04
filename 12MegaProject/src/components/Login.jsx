@@ -16,7 +16,7 @@ function Login() {
     const login = async (data) => {
 
         dispatch(loginUser({...data})).then((session) => {
-        if(session === session.error){
+        if(session.error){
         navigate('/login')
         }if(session){
          navigate('/')
