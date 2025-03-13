@@ -3,8 +3,9 @@ import {Input, Button} from './index'
 import { Link } from 'react-router-dom'
 import {useForm} from 'react-hook-form'
 import AuthService from '../appwrite/auth'
-function PasswordReset({setView}) {
-
+import { useNavigate } from 'react-router-dom'
+function PasswordReset({setView , isPopUp}) {
+    const navigate = useNavigate()
     const {register, handleSubmit} = useForm()
     const [error , setError] = useState('')
     const [getEmailId, setGetEmailId] = useState(false)
@@ -36,7 +37,7 @@ function PasswordReset({setView}) {
                     Don&apos;t have any account?&nbsp;
                     <Link
                         className="font-medium text-primary dark:text-white transition-all duration-200 hover:underline"
-                        onClick={() => setView('signup')}
+                        onClick={isPopUp ? () => setView('signup') : () => navigate('/signup')}
                     >
                         Sign Up
                     </Link>
@@ -44,7 +45,7 @@ function PasswordReset({setView}) {
                 <p className='mt-2 text-center text-base dark:text-white text-black/60'> Remembered your password?
                     <Link
                         className="font-medium text-primary dark:text-white transition-all duration-200 hover:underline"
-                        onClick={() => setView('login')}
+                        onClick={isPopUp ? () => setView('login') : () => navigate('/login')}
                     >
                         Login
                     </Link>

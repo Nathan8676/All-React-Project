@@ -5,7 +5,7 @@ import {Input , Button} from './index'
 import {useForm} from 'react-hook-form'
 import { loginUser } from '../store/authSlice'
 
-function Login({setView}) {
+function Login({setView, isPopUp}) {
     const auth = useSelector(state => state.auth)
     const loading = auth.loading.login
     const error = auth.loginError
@@ -17,6 +17,7 @@ function Login({setView}) {
         dispatch(loginUser({...data})).then((session) => {
         if(session.error){
         }if(session){
+         window.location.reload()
          navigate('/')
          return
         }   
@@ -37,7 +38,7 @@ function Login({setView}) {
             Don&apos;t have any account?&nbsp;
             <Link
                 className="font-medium text-primary dark:text-white transition-all duration-200 hover:underline"
-                onClick={() => setView('signup')}
+                onClick={isPopUp ? () => setView('signup') : () => navigate('/signup')}
             >
                 Sign Up
             </Link>
@@ -46,7 +47,7 @@ function Login({setView}) {
             Forgot Password?&nbsp;
             <Link
                 className="font-medium text-primary dark:text-white transition-all duration-200 hover:underline"
-                onClick={() => setView('passwordReset')}
+                onClick={isPopUp ? () => setView('passwordReset') : () => navigate('/make-password-recovery')}
             >
                 Forgot Password
             </Link>

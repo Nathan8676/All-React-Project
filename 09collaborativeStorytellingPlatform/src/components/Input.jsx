@@ -4,6 +4,7 @@ const Input = forwardRef(function input({
     label,
     className = '',
     type = 'text', 
+    widthHeight = 'w-full', 
     ...props
 }, ref) {
     const id = useId()
@@ -20,7 +21,7 @@ const Input = forwardRef(function input({
             ref={ref}
             {...props}
             className={`px-2 py-3 rounded-lg bg-white text-black focus:bg-gray-50 
-            duration-200 border dark:bg-zinc-950 border-gray-50 w-full ${className} dark:border-black dark:text-white `}
+            duration-200 border dark:bg-zinc-950 border-gray-400 ${widthHeight} ${className} dark:border-black dark:text-white `}
             />
         </div>
       )

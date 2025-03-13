@@ -1,100 +1,26 @@
-import React from 'react'
-
+import React, { useEffect } from 'react'
+import { Card, StoryCard, HeroSection, StoryForm, Container } from '../components';
+import { useDispatch } from 'react-redux';
+import { getStories } from '../store/storySlice';
+import { Query } from 'appwrite';
+import HeroImg from '../assets/hero.jpg'
 function Home() {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getStories()).then((response) => {
+      console.log(response)
+    })
+  })
   return (
-    <div className="px-40 flex flex-1 justify-center py-5">
-      <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
-
-        {/* Hero Section: Background image with headline and search bar */}
-        <div className="@container">
-          <div className="@[480px]:p-4">
-            <div
-              className="flex min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 @[480px]:rounded-xl items-center justify-center p-4"
-              style={{
-                backgroundImage:
-                  'linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%), url("https://cdn.usegalileo.ai/sdxl10/7f54cc76-1094-4c27-96f8-6fda6f8ab7e6.png")',
-              }}
-            >
-              <h1 className="text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em] text-center">
-                Write together, share together.
-              </h1>
-              <label className="flex flex-col min-w-40 h-14 w-full max-w-[480px] @[480px]:h-16">
-                <div className="flex w-full flex-1 items-stretch rounded-xl h-full">
-                  <div className="text-[#637588] flex border border-[#dce0e5] bg-white items-center justify-center pl-[15px] rounded-l-xl border-r-0">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20px"
-                      height="20px"
-                      fill="currentColor"
-                      viewBox="0 0 256 256"
-                    >
-                      <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
-                    </svg>
-                  </div>
-                  <input
-                    placeholder="Start a story"
-                    className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111418] focus:outline-0 focus:ring-0 border border-[#dce0e5] bg-white focus:border-[#dce0e5] h-full placeholder:text-[#637588] px-[15px] rounded-r-none border-r-0 pr-2 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal"
-                    value=""
-                  />
-                  <div className="flex items-center justify-center rounded-r-xl border-l-0 border border-[#dce0e5] bg-white pr-[7px]">
-                    <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#1980e6] text-white text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em]">
-                      <span className="truncate">Get Started</span>
-                    </button>
-                  </div>
-                </div>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        {/* Featured Categories Section: Displaying categories with images and descriptions */}
-        <div className="flex overflow-y-auto [-ms-scrollbar-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <div className="flex items-stretch p-4 gap-8">
-            {/* Category 1 */}
-            <div className="flex h-full flex-1 flex-col gap-4 text-center rounded-lg min-w-52 pt-4">
-              <div
-                className="bg-center bg-no-repeat aspect-square bg-cover rounded-full flex flex-col self-center w-full"
-                style={{
-                  backgroundImage: 'url("https://cdn.usegalileo.ai/stability/a348cd7f-4dc9-4f4b-8d07-7ed524e3cac3.png")',
-                }}
-              ></div>
-              <div>
-                <p className="text-[#111418] text-base font-medium leading-normal">Fantasy</p>
-                <p className="text-[#637588] text-sm font-normal leading-normal">Explore our latest fantasy stories</p>
-              </div>
-            </div>
-
-            {/* Category 2 */}
-            <div className="flex h-full flex-1 flex-col gap-4 text-center rounded-lg min-w-52 pt-4">
-              <div
-                className="bg-center bg-no-repeat aspect-square bg-cover rounded-full flex flex-col self-center w-full"
-                style={{
-                  backgroundImage: 'url("https://cdn.usegalileo.ai/sdxl10/f8313a77-ff81-4d49-838d-81904cc0353f.png")',
-                }}
-              ></div>
-              <div>
-                <p className="text-[#111418] text-base font-medium leading-normal">Sci-fi</p>
-                <p className="text-[#637588] text-sm font-normal leading-normal">Embark on a sci-fi space adventure</p>
-              </div>
-            </div>
-
-            {/* Category 3 */}
-            <div className="flex h-full flex-1 flex-col gap-4 text-center rounded-lg min-w-52 pt-4">
-              <div
-                className="bg-center bg-no-repeat aspect-square bg-cover rounded-full flex flex-col self-center w-full"
-                style={{
-                  backgroundImage: 'url("https://cdn.usegalileo.ai/sdxl10/9fb810cd-6d2f-45e8-8320-b551f4c16ba6.png")',
-                }}
-              ></div>
-              <div>
-                <p className="text-[#111418] text-base font-medium leading-normal">Romance</p>
-                <p className="text-[#637588] text-sm font-normal leading-normal">Get lost in a romantic tale</p>
-              </div>
-            </div>
-          </div>
-        </div>
+    <Container>
+      <HeroSection backgroundImage={HeroImg} heading="Collaborative Storytelling Platform" btnText={'Get Started'} InputPlaceholder={'search'} />
+      <div className='flex flex-row justify-center items-center gap-4 '>
+      <Card title="Fantasy" heading={true} content={true} description="This is a fantasy" photoUrl={"https://t3.ftcdn.net/jpg/02/81/42/82/360_F_281428216_YWRTOqeBWBmtuWxBci02ClnEnI22Fh7e.jpg"} />
+      <Card title="Fantasy" heading={true} content={true} description="This is a fantasy" photoUrl={"https://t3.ftcdn.net/jpg/02/81/42/82/360_F_281428216_YWRTOqeBWBmtuWxBci02ClnEnI22Fh7e.jpg"} />
+      <Card title="Fantasy" heading={true} content={true} description="This is a fantasy" photoUrl={"https://t3.ftcdn.net/jpg/02/81/42/82/360_F_281428216_YWRTOqeBWBmtuWxBci02ClnEnI22Fh7e.jpg"} />
       </div>
-    </div>
+      <StoryCard heading="Stories" subheading="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Veniam et quam voluptate. Eum esse aliquam quas in reiciendis, quisquam rem eius inventore porro aspernatur nesciunt, repellendus quae facere illum consectetur. Ipsa vero, temporibus similique sequi minus eius officiis quis odit quaerat ipsum voluptate neque asperiores maxime! Nemo ipsam officia natus doloribus alias eligendi deleniti commodi nihil, minima eveniet ratione illum reprehenderit. Labore, dolorum. Voluptas eveniet vel nihil facere accusantium maiores deleniti reprehenderit tempore dolor voluptatem explicabo, cupiditate sunt expedita distinctio debitis consequuntur. Amet, incidunt. Eos saepe, adipisci possimus voluptate doloremque ea est quae, deserunt harum reiciendis voluptas suscipit temporibus sapiente minima molestiae quibusdam! Eligendi nobis labore culpa impedit omnis recusandae beatae reiciendis vel officiis quibusdam fugiat eum quaerat aspernatur ducimus, blanditiis, tempora deserunt magnam voluptatum aut corporis temporibus. Cumque eos reprehenderit, tempore suscipit natus recusandae quam. Tempora quod enim reiciendis facilis nostrum obcaecati eos, quas distinctio vel doloribus numquam non cum laborum, itaque incidunt culpa quam accusamus modi facere in? Corporis cupiditate minus iure nobis aliquam vitae earum provident. Dolorem laudantium rerum nulla pariatur commodi. Nam illum ducimus, corrupti nobis ullam id itaque iusto, excepturi repudiandae eaque quibusdam possimus, autem debitis ipsum porro sint voluptatibus non exercitationem totam? Possimus, illo." imageSrc={"https://www.imgacademy.com/sites/default/files/styles/scale_1700w/public/2022-07/img-homepage-meta_0.jpg?itok=LMirU0Ik"} />
+    </Container>
   );
 }
 

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wattpad-Like Chapter Creation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Main Container -->
+    <div class="w-full max-w-5xl mx-auto py-8 px-6">
+
+        <!-- Top Bar: Status, Save, Publish -->
+        <div class="flex justify-between items-center mb-6 border-b border-gray-200 pb-4">
+            <!-- Status Dropdown -->
+            <div class="flex items-center space-x-4">
+                <label for="status" class="text-gray-600 font-semibold">Status:</label>
+                <select id="status" class="text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option>Draft</option>
+                    <option>Published</option>
+                </select>
+            </div>
+
+            <!-- Save and Publish Buttons -->
+            <div class="space-x-4">
+                <button class="bg-gray-300 text-black px-4 py-2 rounded-md hover:bg-gray-400 transition">
+                    Save
+                </button>
+                <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">
+                    Publish
+                </button>
+            </div>
+        </div>
+
+        <!-- Chapter Title Section -->
+        <div class="w-full mb-8">
+            <input 
+                type="text" 
+                placeholder="Enter Chapter Title Here" 
+                class="w-full text-5xl font-semibold bg-transparent focus:outline-none text-gray-800"
+            />
+        </div>
+
+        <!-- Cover Image Section -->
+        <div class="w-full mb-8 relative">
+            <div class="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center">
+                <!-- Placeholder for cover image -->
+                <span class="text-gray-500">Cover Image (Optional)</span>
+            </div>
+            <!-- Upload Button -->
+            <button class="absolute bottom-0 right-0 bg-blue-500 text-white px-4 py-2 rounded-lg mt-2 hover:bg-blue-600 transition">
+                Upload Cover
+            </button>
+        </div>
+
+        <!-- Content Editor Section -->
+        <div class="w-full mb-10">
+            <textarea 
+                placeholder="Start typing your chapter content..." 
+                class="w-full h-96 bg-transparent text-lg focus:outline-none text-gray-700 p-4"
+                rows="10"
+            ></textarea>
+        </div>
+
+        <!-- Footer Options -->
+        <div class="flex justify-end space-x-4">
+            <button class="bg-gray-200 text-black px-4 py-2 rounded-md hover:bg-gray-300 transition">
+                Cancel
+            </button>
+            <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">
+                Save Changes
+            </button>
+        </div>
+
+    </div>
+
+</body>
+</html>

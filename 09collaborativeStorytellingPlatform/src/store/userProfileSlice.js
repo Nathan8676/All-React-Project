@@ -3,6 +3,7 @@ import {createAsyncThunk} from '@reduxjs/toolkit';
 import NewDatabase from '../appwrite/Database';
 import AuthService from '../appwrite/auth';
 const initialState = {
+    status: false,
     userProfile: null,
     userProfileError: null,
     userProfileLoading: false,
@@ -10,7 +11,7 @@ const initialState = {
 
 export const getUserProfile = createAsyncThunk(
     'userProfile/getUserProfile',
-    async({Id}) => {
+    async(Id) => {
         const response = await NewDatabase.getUserProfile(Id)
         if(response.error){
             throw new Error(response.error)
@@ -49,8 +50,8 @@ export const deleteUserProfile = createAsyncThunk(
 
 export const addUserProfile = createAsyncThunk(
     'userProfile/addUserProfile',
-    async({data}, ) => {
-        const response = await NewDatabase.createUserProfile(data)
+    async({UserId, data}) => {
+        const response = await NewDatabase.createUserProfile(UserId,{...data})
         if(response.error){
             throw new Error(response.error)
         }
@@ -61,6 +62,14 @@ export const addUserProfile = createAsyncThunk(
 const userProfileSlice = createSlice({
     name: 'userProfile',
     initialState,
+    reducers: {
+        clearUserProfileSlice: (state) => {
+            state.status = false
+            state.userProfile =  null
+            state.userProfileLoading =  false
+            state.userProfileError = null
+        }  
+    },
     extraReducers: (builder) => {
         builder
             .addCase(getUserProfile.pending, (state) => {
@@ -68,6 +77,7 @@ const userProfileSlice = createSlice({
                 state.userProfileError = null;
             })
             .addCase(getUserProfile.fulfilled, (state, action) => {
+                state.status = true
                 state.userProfileLoading = false;
                 state.userProfile = action.payload;
             })
@@ -104,6 +114,7 @@ const userProfileSlice = createSlice({
                 state.userProfileError = null;
             })
             .addCase(addUserProfile.fulfilled, (state, action) => {
+                state.status = true
                 state.userProfileLoading = false;
                 state.userProfile = action.payload;
             })
@@ -115,4 +126,5 @@ const userProfileSlice = createSlice({
 
 })
 
-export default userProfileSlice
+export const {clearUserProfileSlice} = userProfileSlice.actions
+export default userProfileSlice.reducer

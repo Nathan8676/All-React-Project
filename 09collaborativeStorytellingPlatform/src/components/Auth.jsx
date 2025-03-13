@@ -8,13 +8,13 @@ function Auth({setAuthPopup}) {
     const switchView = () => {
         switch (view) {
             case "login":
-                return <Login setView={setView}/>
+                return <Login setView={setView} isPopUp={true}/>
 
             case "signup":
-                return <Signup setView={setView}/> 
+                return <Signup setView={setView} isPopUp={true}/> 
 
             case "passwordReset":
-                return <PasswordReset setView={setView}/>
+                return <PasswordReset setView={setView} isPopUp={true}/>
 
             default:
                 return null

@@ -13,11 +13,11 @@ export class Database{
         this.Storage = new Storage(this.client);
     }
 
-    async createUserProfile({UserName, UserId , Dob , bio , Story}){
+    async createUserProfile(UserId, {UserName, Dob , bio , Story, Avatar}){
 
         try {
-            return await this.Database.createDocument(config.DatabaseId, config.CollectionIdUSERPROFILE, ID.unique(), {
-                UserName, Dob, UserId, bio , Story
+            return await this.Database.createDocument(config.DatabaseId, config.CollectionIdUSERPROFILE, UserId, {
+                UserName, Dob, bio , Story, Avatar
             })
         } catch (error) {
             console.log("this error is from Database::createUserProfile", error);
@@ -25,10 +25,10 @@ export class Database{
         }
     }
 
-    async updateUserProfile(UserId ,{UserName, Dob, bio, Story}){
+    async updateUserProfile(UserId ,{UserName, Dob, bio, Story, Avatar}){
         try{
             return await this.Database.updateDocument(config.DatabaseId, config.CollectionIdUSERPROFILE, UserId, {
-                UserName, Dob, bio, Story
+                UserName, Dob, bio, Story, Avatar
             })
         } catch (error) {
             console.log("this error is from Database::updateUserProfile", error);
@@ -49,7 +49,7 @@ export class Database{
         }
     }
 
-    async getUserProfile(){
+    async getUserProfile(Id){
         try{
             return await this.Database.getDocument(config.DatabaseId, config.CollectionIdUSERPROFILE, Id)
         }catch (error) {
@@ -58,11 +58,12 @@ export class Database{
         }
     }
 
-    async createStory({title, content, Img, status, ForkFrom = null, userProfile }){
+    async createStory({Title, Content, Description, Img, status, Mature, ForkedFrom = null, Complete, userProfile, Category }){
 
         try {
+            console.log({Title, Content, Description, Img, status, ForkedFrom, userProfile , Mature , Complete, Category})
             return await this.Database.createDocument(config.DatabaseId, config.CollectionIdSTORY, ID.unique(), {
-                title, content, Img, status, ForkFrom, userProfile
+                Title, Content, Description, Img, status, ForkedFrom, userProfile, Mature , Complete, Category
             })
         } catch (error) {
             console.log("this error is from Database::createStory", error);
@@ -71,10 +72,10 @@ export class Database{
 
     }
 
-    async updateStory(Id, {title, content, Img, status, ForkFrom, userProfile}){
+    async updateStory(Id, {title, content, Img, status, ForkFrom, userProfile , Mature , Complete, Category }){
         try {
             return await this.Database.updateDocument(config.DatabaseId, config.CollectionIdSTORY, Id, {
-                title, content, Img, status, ForkFrom, userProfile
+                title, content, Img, status, ForkFrom, userProfile, Mature, Complete, Category
             })
         } catch (error) {
             console.log("this error is from Database::updateStory", error);
@@ -100,7 +101,7 @@ export class Database{
         }
     }
 
-    async listStories(queries = [Query.equal('status', true)]){
+    async listStories(queries){
         try {
             return await this.Database.listDocuments(config.DatabaseId, config.CollectionIdSTORY, queries)
         } catch (error) {
@@ -109,9 +110,105 @@ export class Database{
         }
     }
 
+    async createChapter({Heading, Content, Order, Img, status, story}){
+        try {
+            return await this.Database.createDocument(config.DatabaseId, config.CollectionIdSTORYCHAPTER, ID.unique(), {
+              Heading, story, Img, Order: parseInt(Order), status, Content
+            })
+        } catch (error) {
+            console.log("this error is from Database::createChapter", error);
+            return {error: error.message}
+        }
+    }
+
+    async getChapter({Id , queries = []}){
+        try {
+            return await this.Database.getDocument(config.DatabaseId, config.CollectionIdSTORYCHAPTER, Id , queries)
+        } catch (error) {
+            console.log("this error is from Database::getChapter", error);
+            return {error: error.message}
+        }
+    }
+
+    async listChapters(queries = [Query.equal('status', "active")]){
+        try {
+            return await this.Database.listDocuments(config.DatabaseId, config.CollectionIdSTORYCHAPTER, queries)
+        } catch (error) {
+            console.log("this error is from Database::listChapters", error);
+            return {error: error.message}
+        }
+    }
+
+    async deleteChapter(Id){
+        try {
+            return await this.Database.deleteDocument(config.DatabaseId, config.CollectionIdSTORYCHAPTER, Id)
+        } catch (error) {
+            console.log("this error is from Database::deleteChapter", error);
+            return {error: error.message}
+        }
+    }
+
+    async updateChapter(Id, {Heading, Content, Order, Img, status, story}){
+        try {
+            return await this.Database.updateDocument(config.DatabaseId, config.CollectionIdSTORYCHAPTER, Id, {
+                Heading, Content, Order: parseInt(Order), Img, status, story
+            })
+        } catch (error) {
+            console.log("this error is from Database::updateChapter", error);
+            return {error: error.message}
+        }
+    }
+
+    async createReview({Rating, Comment, ReplyTold, userProfile, CommentDislike = false, CommentLike = false, StoryLike = false, StoryDislike = false, story}){
+        try {
+            return await this.Database.createDocument(config.DatabaseId, config.CollectionIdREVIEW, ID.unique(), {
+                Rating, Comment, ReplyTold, userProfile, CommentDislike, CommentLike, StoryLike, StoryDislike, story
+            })
+        } catch (error) {
+            console.log("this error is from Database::createReview", error);
+            return {error: error.message}
+        }
+    }
+
+    async updateReview({Id , Rating, Comment, ReplyTold, CommentDislike = false, CommentLike = false, StoryLike = false, StoryDislike = false}){
+        try {
+            return await this.Database.updateDocument(config.DatabaseId, config.CollectionIdREVIEW, Id, {
+                Rating, Comment, ReplyTold, CommentDislike, CommentLike, StoryLike, StoryDislike
+            })
+        } catch (error) {
+            console.log("this error is from Database::updateReview", error);
+            return {error: error.message}
+        }
+    }
+
+    async deleteReview(Id){
+        try {
+            return await this.Database.deleteDocument(config.DatabaseId, config.CollectionIdREVIEW, Id)
+        } catch (error) {
+            console.log("this error is from Database::deleteReview", error);
+            return {error: error.message}
+        }
+    }
+
+    async getReview({Id , queries = []}){
+        try {
+            return await this.Database.getDocument(config.DatabaseId, config.CollectionIdREVIEW, Id , queries)
+        } catch (error) {
+            console.log("this error is from Database::getReview", error);
+            return {error: error.message}
+        }
+    }
+
+    async listReviews(queries){
+        try {
+            return await this.Database.listDocuments(config.DatabaseId, config.CollectionIdREVIEW, queries)
+        } catch (error) {
+            console.log("this error is from Database::listReviews", error);
+            return {error: error.message}
+        }
+    }
     // Storage functions
 
-     // storage functions
      async uploadFile(file){
         try {
             return await this.Storage.createFile(config.BucketId, ID.unique(), file)
@@ -131,7 +228,7 @@ export class Database{
         }
     }
 
-    getFilePreview(fileId){
+     getFilePreview(fileId){
         try {
             return this.Storage.getFilePreview(config.BucketId, fileId)
         } catch (error) {
@@ -140,7 +237,35 @@ export class Database{
         }
     }
 
+     uploadStoryCover(file){
+        try {
+            return this.Storage.createFile(config.BucketIdStoryCover, ID.unique(), file)
+        } catch (error) {
+            console.log("this error is from DatabaseConfi::uploadStoryCover", error);
+            return {error: error.message}
+        }
+    }
+
+    async deleteStoryCover(fileId){
+        try {
+             await this.Storage.deleteFile(config.BucketIdStoryCover, fileId)
+            return true
+        } catch (error) {
+            console.log("this error is from DatabaseConfi::deleteStoryCover", error);
+            return {error: error.message}
+        }
+    }
+
+    async getStoryCover(fileId){
+        try {
+            return this.Storage.getFilePreview(config.BucketIdStoryCover, fileId)
+        } catch (error) {
+            console.log("this error is from DatabaseConfi::getStoryCover", error);
+            return {error: error.message}
+        }
+    }
 }
+
 
 const NewDatabase = new Database
 

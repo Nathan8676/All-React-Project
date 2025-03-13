@@ -1,7 +1,6 @@
-import {createSlice} from "@reduxjs/toolkit";
-import {createAsyncThunk} from "@reduxjs/toolkit";
+import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import NewDatabase from "../appwrite/Database";
-import { Query } from "appwrite";
+
 
 const initialState = {
     stories: [],
@@ -14,7 +13,7 @@ const initialState = {
 
 export const getStories = createAsyncThunk(
     'story/getStories',
-    async({queries}) => {
+    async(queries) => {
         const response = await NewDatabase.listStories(queries)
         if(response.error){
             throw new Error(response.error)
@@ -53,6 +52,7 @@ export const deleteStory = createAsyncThunk(
 export const addStory = createAsyncThunk(
     'story/addStory',
     async({data}) => {
+        console.log({...data})
         const response = await NewDatabase.createStory({...data})
         if(response.error){
             throw new Error(response.error)

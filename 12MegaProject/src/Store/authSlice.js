@@ -16,6 +16,7 @@ export const loginUser = createAsyncThunk(
     async({email, password}) => {
         const response = await AuthService.login({email, password})
         if(response.error){
+            console.log("response error::"+response.error)
             throw new Error(response.error)
         }
         return response

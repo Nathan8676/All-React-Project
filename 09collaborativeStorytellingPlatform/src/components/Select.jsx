@@ -4,6 +4,7 @@ const Select = forwardRef(({
     options = [],
     label,
     className,
+    defaultValue,
     ...props
 },ref) => {
 const id = useId()
@@ -21,7 +22,7 @@ const id = useId()
             {...props}
             ref={ref}
             className={`px-2 py-3 rounded-lg dark:bg-zinc-950 dark:text-white dark:border-black bg-white text-black focus:bg-gray-50 
-            duration-200 border border-gray-50 w-full ${className} `}
+            duration-200 border border-gray-500 w-full ${className} `}
             >
             {options?.map((option) => (
                 <option key={option} value={option}>

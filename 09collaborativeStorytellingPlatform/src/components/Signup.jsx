@@ -1,10 +1,10 @@
-import React , {useEffect} from 'react'
+import React from 'react'
 import {Link, useNavigate} from 'react-router-dom'
 import {useSelector , useDispatch} from 'react-redux'
 import {Input , Button} from './index'
 import {signupUser} from '../store/authSlice'
 import {useForm} from 'react-hook-form'
-function Signup({setView}) {
+function Signup({setView , isPopUp}) {
     const auth = useSelector(state => state.auth)
     const loading = auth.loading.signup
     const error = auth.signupError
@@ -17,7 +17,7 @@ function Signup({setView}) {
         if(session.error){
         return
         }if(session){
-         navigate('/')
+         navigate('/create-profile')
          return
         }   
         })
@@ -36,7 +36,7 @@ function Signup({setView}) {
              Already have an account?&nbsp;
             <Link
                 className="font-medium dark:text-white text-primary transition-all duration-200 hover:underline"
-                onClick={() => setView('login')}
+                onClick={isPopUp ? () => setView('login') : () => navigate('/login')}
             >
                 Login
             </Link>

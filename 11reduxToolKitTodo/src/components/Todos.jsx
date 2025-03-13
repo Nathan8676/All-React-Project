@@ -7,7 +7,7 @@ function Todos() {
   const [completed, setCompleted] = useState(false)
   const [todoMsg , setTodoMsg] = useState("")
   const [id, setId] = useState("")
-  const todos = useSelector(state => state.todo.todo) 
+  const todos = useSelector(state => state.todo)
   const dispatch = useDispatch()
   const handleEdit = (todo) => {
     setId(todo.id)
@@ -23,7 +23,6 @@ function Todos() {
     dispatch(toggleTodo(id))
     setCompleted(true)
   }
- 
 
 
     return (
@@ -41,12 +40,12 @@ function Todos() {
               >
                 Done
               </button>
-                <input 
+                <input
                  className={`text-white  ${todo.completed ? "line-through" : ""}`}
                  readOnly={id !== todo.id && completed === true}
                  value={id === todo.id ? todoMsg : todo.text}
                  onChange={(e) => setTodoMsg(e.target.value) }
-                
+
                 />
                  { todo.completed ? null : (
                  id === todo.id ? (

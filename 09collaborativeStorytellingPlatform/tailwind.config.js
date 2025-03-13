@@ -4,6 +4,8 @@ export default {
   darkMode: "class",
   theme: {
     
+    
+    extend: {
     screens: {
       'sm': '480px',
       'mobile': '640px',
@@ -11,7 +13,6 @@ export default {
       'laptop': '1024px',
       'desktop': '1280px',
     },
-    extend: {
       colors: {
       cadetGray: "#A1A6B4",
       Rose: "#AB4E68",
